@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор бонусной программы — UDS</title>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(YOUR_COUNTER_ID, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/YOUR_COUNTER_ID" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* UDS Admin palette */
+  --white: #ffffff;
+  --grey-100: #f8f9fc;
+  --grey-200: #ebeef3;
+  --grey-300: #d2d7e3;
+  --grey-400: #bdc3d0;
+  --grey-500: #8c94a5;
+  --grey-600: #606877;
+  --grey-700: #49505e;
+  --grey-800: #2a2d32;
+  --color-primary-300: #5169f3;
+  --color-primary-200: #b2bdff;
+  --color-primary-100: #ebefff;
+  --color-primary-400: #212f97;
+  --color-primary-text: #3b3c65;
+  --color-success-300: #52a572;
+  --color-success-100: #e8f6d4;
+  --color-danger-300: #e01f58;
+  --color-danger-100: #ffe6ea;
+  --color-alert-300: #ffa145;
+  --color-alert-100: #ffefe0;
+  --color-warning-300: #f2d255;
+  --color-warning-400: #94740a;
+  --text-01: rgba(27, 31, 59, 1);
+  --text-02: rgba(27, 31, 59, 0.65);
+  --text-03: rgba(27, 31, 59, 0.4);
+  --border-radius: 4px;
+  --shadow-200: 0px 1px 12px rgba(0, 0, 0, 0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
+  color: var(--text-01);
+  background: var(--white);
+  min-height: 100vh;
+}
+
+/* ─── Header ─── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--grey-200);
+  background: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-logo {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--grey-800);
+  letter-spacing: -0.3px;
+}
+.header-sub {
+  font-size: 12px;
+  color: var(--grey-500);
+}
+.btn-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey-500);
+  transition: background 0.15s;
+}
+.btn-close:hover { background: var(--grey-100); }
+.btn-close svg { width: 20px; height: 20px; }
+
+/* ─── Layout ─── */
+.layout {
+  display: flex;
+  gap: 0;
+  min-height: calc(100vh - 49px);
+}
+.panel-left {
+  width: 380px;
+  min-width: 380px;
+  padding: 24px;
+  background: var(--white);
+  border-right: 1px solid var(--grey-200);
+  position: sticky;
+  top: 49px;
+  height: calc(100vh - 49px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.panel-right {
+  flex: 1;
+  padding: 24px 32px;
+  background: var(--grey-100);
+  overflow-y: auto;
+}
+
+/* ─── Headline ─── */
+.headline {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  color: var(--grey-800);
+}
+.lead {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-02);
+  margin-bottom: 24px;
+}
+
+/* ─── Form fields (стиль UDS Admin gamma-textfield) ─── */
+.field { margin-bottom: 20px; }
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--grey-600);
+  margin-bottom: 6px;
+}
+.field-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--grey-300);
+  border-radius: var(--border-radius);
+  padding: 0 10px;
+  height: 36px;
+  background: var(--white);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field-input-wrap:focus-within {
+  border-color: var(--color-primary-300);
+  box-shadow: 0 0 0 2px var(--color-primary-200);
+}
+.field-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-01);
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+}
+.field-input::placeholder { color: var(--text-03); }
+.field-suffix {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--grey-500);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* ─── Mode switcher (стиль UDS Admin tab__control-btn) ─── */
+.mode-section { margin-bottom: 20px; }
+.mode-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--grey-600);
+  margin-bottom: 6px;
+}
+.mode-switcher {
+  display: flex;
+}
+.mode-btn {
+  flex: 1;
+  padding: 7px 12px;
+  border: 2px solid var(--grey-200);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--white);
+  color: var(--grey-600);
+  transition: all 0.15s;
+  margin-left: -2px;
+}
+.mode-btn:first-child {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  margin-left: 0;
+}
+.mode-btn:last-child {
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+.mode-btn.active {
+  border-color: var(--color-primary-300);
+  color: var(--color-primary-300);
+  background: var(--white);
+  z-index: 1;
+  position: relative;
+}
+.mode-btn:not(.active):hover {
+  background: var(--grey-100);
+}
+.mode-desc {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--grey-500);
+  margin-top: 8px;
+}
+
+/* ─── Warning banner (стиль UDS Admin notification-banner alert) ─── */
+.warning-banner {
+  background: var(--color-alert-100);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--grey-700);
+  display: none;
+  position: relative;
+  padding-left: 40px;
+}
+.warning-banner::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-alert-300);
+}
+.warning-banner.visible { display: block; }
+
+/* ─── Apply button (стиль UDS Admin primary-button) ─── */
+.apply-wrap {
+  margin-top: auto;
+  padding-top: 16px;
+}
+.btn-apply {
+  width: 100%;
+  padding: 8px 16px;
+  height: 36px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--color-primary-300);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  position: relative;
+}
+.btn-apply:hover:not(:disabled) { background: #6c86e2; }
+.btn-apply:active:not(:disabled) { background: var(--color-primary-400); }
+.btn-apply:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+}
+.btn-apply-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--grey-800);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--border-radius);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.btn-apply:disabled:hover .btn-apply-tooltip { display: block; }
+
+/* ─── Cards (стиль UDS Admin app-card) ─── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--grey-200);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+/* ─── Results: Section titles ─── */
+.step {
+  margin-bottom: 16px;
+}
+.step-number {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary-300);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+.step-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--grey-800);
+  margin-bottom: 16px;
+}
+
+/* ─── Welcome block ─── */
+.welcome-value {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--color-primary-300);
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.6px;
+}
+.welcome-unit {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--grey-500);
+  margin-left: 2px;
+}
+.welcome-sub {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-02);
+  margin-top: 8px;
+}
+
+/* ─── Tiers table (стиль UDS Admin таблицы) ─── */
+.tiers {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tiers th {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--grey-500);
+  text-align: left;
+  padding: 0 12px 10px 0;
+  border-bottom: 1px solid var(--grey-200);
+}
+.tiers td {
+  padding: 12px 12px 12px 0;
+  border-bottom: 1px solid var(--grey-200);
+  font-size: 14px;
+  vertical-align: middle;
+}
+.tiers tr:last-child td { border-bottom: none; }
+.tier-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tier-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.tier-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--grey-800);
+  line-height: 1.2;
+}
+.tier-sub {
+  font-size: 12px;
+  color: var(--grey-500);
+  font-weight: 400;
+}
+.tier-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey-800);
+}
+.tier-condition {
+  font-size: 13px;
+  color: var(--text-02);
+}
+
+/* ─── Economics box ─── */
+.economics {
+  background: var(--grey-100);
+  border: 1px solid var(--grey-200);
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
+}
+.eco-label {
+  font-size: 12px;
+  color: var(--grey-500);
+  margin-bottom: 4px;
+}
+.eco-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--grey-800);
+}
+.eco-sub {
+  font-size: 11px;
+  color: var(--grey-500);
+  margin-top: 2px;
+}
+
+/* ─── Methodology (стиль UDS Admin notification-banner default) ─── */
+.methodology {
+  background: var(--grey-100);
+  border-radius: 6px;
+  padding: 20px 24px;
+}
+.methodology-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--grey-800);
+}
+.methodology p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-02);
+  margin-bottom: 10px;
+}
+.methodology strong {
+  color: var(--grey-800);
+  font-weight: 600;
+}
+.formula-block {
+  background: var(--white);
+  border-left: 3px solid var(--color-primary-300);
+  padding: 10px 14px;
+  margin: 10px 0 14px;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-02);
+  white-space: pre-wrap;
+}
+.benchmarks {
+  margin-top: 12px;
+  padding-left: 18px;
+}
+.benchmarks li {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-02);
+  margin-bottom: 4px;
+}
+.benchmarks strong {
+  color: var(--grey-800);
+  font-weight: 600;
+}
+
+/* ─── DISCOUNT stub ─── */
+.discount-stub {
+  display: none;
+  background: var(--white);
+  border: 1px solid var(--grey-200);
+  border-radius: 6px;
+  padding: 48px 32px;
+  text-align: center;
+}
+.discount-stub.visible { display: block; }
+.discount-stub-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.discount-stub-icon svg { width: 24px; height: 24px; }
+.discount-stub-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--grey-800);
+  margin-bottom: 8px;
+}
+.discount-stub-text {
+  font-size: 14px;
+  color: var(--text-02);
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ─── Vertical select ─── */
+.vertical-select {
+  width: 100%;
+  height: 36px;
+  padding: 0 32px 0 10px;
+  border: 1px solid var(--grey-300);
+  border-radius: var(--border-radius);
+  background: var(--white);
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238c94a5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-01);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.vertical-select:focus {
+  border-color: var(--color-primary-300);
+  box-shadow: 0 0 0 2px var(--color-primary-200);
+}
+.field-hint {
+  font-size: 11px;
+  color: var(--grey-400);
+  font-weight: 400;
+  margin-left: 6px;
+}
+
+/* ─── Stress test cards ─── */
+.stress-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+.stress-card {
+  background: var(--color-success-100);
+  border: 1px solid #cfe6b5;
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.stress-card.warn {
+  background: var(--color-alert-100);
+  border-color: #ffd6a8;
+}
+.stress-card.danger {
+  background: var(--color-danger-100);
+  border-color: #f7c1cb;
+}
+.stress-label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--grey-800);
+  margin-bottom: 10px;
+  min-height: 34px;
+}
+.stress-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--grey-800);
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+}
+.stress-card.warn .stress-value { color: #94740a; }
+.stress-card.danger .stress-value { color: var(--color-danger-300); }
+.stress-sub {
+  font-size: 11px;
+  color: var(--grey-500);
+  margin-top: 4px;
+}
+.stress-intro {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-02);
+  margin-bottom: 16px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 960px) {
+  .economics { grid-template-columns: 1fr 1fr; }
+  .panel-left { width: 340px; min-width: 340px; padding: 20px; }
+  .panel-right { padding: 20px 24px; }
+}
+
+@media (max-width: 720px) {
+  .layout {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .panel-left {
+    width: 100%;
+    min-width: 0;
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--grey-200);
+    padding: 20px 16px;
+  }
+  .panel-right {
+    padding: 16px;
+    background: var(--grey-100);
+  }
+  .header { padding: 10px 16px; }
+  .headline { font-size: 18px; }
+  .lead { font-size: 12px; margin-bottom: 16px; }
+  .field { margin-bottom: 16px; }
+  .mode-section { margin-bottom: 16px; }
+  .mode-btn { font-size: 12px; padding: 6px 8px; }
+  .mode-desc { font-size: 11px; }
+  .stress-cards { grid-template-columns: 1fr; gap: 10px; }
+  .stress-label { min-height: 0; }
+  .economics { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px 14px; }
+  .eco-value { font-size: 14px; }
+  .eco-label { font-size: 11px; }
+  .welcome-value { font-size: 32px; }
+  .welcome-unit { font-size: 16px; }
+  .step-title { font-size: 14px; }
+  .card { padding: 16px; margin-bottom: 12px; }
+  .methodology { padding: 16px; }
+  .methodology-title { font-size: 13px; }
+  .methodology p { font-size: 12px; }
+  .formula-block { font-size: 11px; padding: 8px 10px; }
+  .benchmarks li { font-size: 11px; }
+  .tiers th { font-size: 11px; }
+  .tiers td { padding: 10px 8px 10px 0; font-size: 13px; }
+  .tier-name { font-size: 13px; }
+  .tier-sub { font-size: 11px; }
+  .tier-value { font-size: 13px; }
+  .tier-condition { font-size: 12px; }
+  .apply-wrap { padding-top: 12px; }
+}
+
+@media (max-width: 420px) {
+  .tiers th:nth-child(4),
+  .tiers td:nth-child(4) { display: none; }
+  .economics { grid-template-columns: 1fr 1fr; }
+  .mode-btn { padding: 6px 4px; font-size: 11px; }
+  .header-sub { display: none; }
+}
+
+/* hide spin buttons */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] { -moz-appearance: textfield; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <span class="header-logo">UDS</span>
+    <span class="header-sub" data-i18n="headerSub">Калькулятор · Программа лояльности</span>
+  </div>
+  <button class="btn-close" id="btnClose" data-i18n-title="closeTitle" title="Закрыть">
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.293 5.293a1 1 0 011.414 0L10 8.586l3.293-3.293a1 1 0 111.414 1.414L11.414 10l3.293 3.293a1 1 0 01-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z" fill="currentColor"/></svg>
+  </button>
+</header>
+
+<div class="layout">
+  <!-- Left panel -->
+  <aside class="panel-left">
+    <h1 class="headline" data-i18n="headline">Подберите параметры программы</h1>
+    <p class="lead" data-i18n="lead">Введите три параметра — калькулятор подберёт значения, защищающие маржу от размытия и оставляющие программу заметной для клиента. Все ограничения учитывают специфику вашей сферы бизнеса.</p>
+
+    <div class="field">
+      <label class="field-label" for="inputAov" data-i18n="aovLabel">Средний чек</label>
+      <div class="field-input-wrap">
+        <input type="number" class="field-input" id="inputAov" min="100" step="100" value="2500" placeholder="2500">
+        <span class="field-suffix" id="aovSuffix">₽</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="inputMargin" data-i18n="marginLabel">Маржинальность</label>
+      <div class="field-input-wrap">
+        <input type="number" class="field-input" id="inputMargin" min="5" max="95" step="1" value="40" placeholder="40">
+        <span class="field-suffix">%</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="vertical"><span data-i18n="verticalLabel">Сфера бизнеса</span><span class="field-hint" data-i18n="verticalHint">отрасль</span></label>
+      <select class="vertical-select" id="vertical">
+        <option value="fmcg" data-i18n="vertical.fmcg">Продукты / FMCG / алкоголь</option>
+        <option value="retail_mass" data-i18n="vertical.retail_mass">Розница массмаркет (аптека, электроника)</option>
+        <option value="hospitality" data-i18n="vertical.hospitality">Кафе / рестораны</option>
+        <option value="beauty" data-i18n="vertical.beauty">Красота / здоровье</option>
+        <option value="services" data-i18n="vertical.services">Услуги / образование</option>
+        <option value="retail_mid" data-i18n="vertical.retail_mid">Розница средний+ (одежда, ювелирка)</option>
+        <option value="premium" data-i18n="vertical.premium">Премиум / luxury</option>
+        <option value="other" data-i18n="vertical.other" selected>Другое</option>
+      </select>
+    </div>
+
+    <div class="mode-section">
+      <span class="mode-label" data-i18n="modeLabel">Режим</span>
+      <div class="mode-switcher">
+        <button class="mode-btn" data-mode="conservative" data-i18n="mode.conservative">Консервативный</button>
+        <button class="mode-btn active" data-mode="balanced" data-i18n="mode.balanced">Баланс</button>
+        <button class="mode-btn" data-mode="aggressive" data-i18n="mode.aggressive">Агрессивный</button>
+      </div>
+      <p class="mode-desc" id="modeDesc"></p>
+    </div>
+
+    <div class="warning-banner" id="warningBanner"></div>
+
+    <div class="apply-wrap">
+      <button class="btn-apply" id="btnApply">
+        <span id="btnApplyText" data-i18n="apply">Применить настройки</span>
+        <span class="btn-apply-tooltip" id="applyTooltip"></span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Right panel -->
+  <main class="panel-right">
+    <!-- CHARGE_SCORES content -->
+    <div id="resultsContent">
+      <!-- Step 01: Welcome -->
+      <div class="card">
+        <section class="step">
+          <div class="step-number" data-i18n="step01">Шаг 01</div>
+          <div class="step-title" data-i18n="welcomeTitle">Приветственные баллы</div>
+          <div class="welcome-value"><span id="welcomeVal">300</span><span class="welcome-unit" data-i18n="welcomeUnit"> б.</span></div>
+          <p class="welcome-sub" id="welcomeSub"></p>
+        </section>
+      </div>
+
+      <!-- Step 02: Tiers -->
+      <div class="card">
+        <section class="step">
+          <div class="step-number" data-i18n="step02">Шаг 02</div>
+          <div class="step-title" data-i18n="tiersTitle">Статусы и условия</div>
+          <table class="tiers">
+            <thead>
+              <tr>
+                <th data-i18n="tierHead.status">Статус</th>
+                <th data-i18n="tierHead.cashback">Кэшбэк</th>
+                <th data-i18n="tierHead.redeem">Списание</th>
+                <th data-i18n="tierHead.condition">Условие достижения</th>
+              </tr>
+            </thead>
+            <tbody id="tiersBody"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <div class="card">
+        <section class="step">
+          <div class="step-number" data-i18n="step03">Шаг 03</div>
+          <div class="step-title" data-i18n="stressTitle">Проверка на устойчивость</div>
+          <p class="stress-intro" id="stressIntro">Три точки, где программа может неожиданно ударить по марже. <span style="color:#52a572;font-weight:600;">Зелёный</span> — операция остаётся прибыльной, <span style="color:#94740a;font-weight:600;">оранжевый</span> — на грани, <span style="color:var(--color-danger-300);font-weight:600;">красный</span> — риск убытка.</p>
+          <div class="stress-cards">
+            <div class="stress-card" id="stress-1">
+              <div class="stress-label" data-i18n="stress1Label">Маржа на первой покупке нового клиента</div>
+              <div class="stress-value" id="stress-1-val">+0 ₽</div>
+              <div class="stress-sub" id="stress-1-sub">если новичок сразу спишет приветственные баллы</div>
+            </div>
+            <div class="stress-card" id="stress-2">
+              <div class="stress-label" data-i18n="stress2Label">Маржа при максимальном списании постоянным клиентом</div>
+              <div class="stress-value" id="stress-2-val">+0 ₽</div>
+              <div class="stress-sub" id="stress-2-sub">VIP списывает по верхнему лимиту своего статуса</div>
+            </div>
+            <div class="stress-card" id="stress-3">
+              <div class="stress-label" data-i18n="stress3Label">Фактическая скидка для клиента через год</div>
+              <div class="stress-value" id="stress-3-val">0%</div>
+              <div class="stress-sub" id="stress-3-sub">как клиент будет воспринимать программу</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="card">
+        <section class="step">
+          <div class="step-title" data-i18n="ecoTitle" style="margin-bottom: 12px;">Экономика типовой операции</div>
+          <div class="economics">
+            <div class="eco-item">
+              <div class="eco-label" data-i18n="ecoCheckLabel">Чек</div>
+              <div class="eco-value" id="ecoCheck">—</div>
+            </div>
+            <div class="eco-item">
+              <div class="eco-label" data-i18n="ecoCogsLabel">Себестоимость</div>
+              <div class="eco-value" id="ecoCogs">—</div>
+            </div>
+            <div class="eco-item">
+              <div class="eco-label" data-i18n="ecoCashbackLabel">Стоимость кэшбэка</div>
+              <div class="eco-value" id="ecoCashback">—</div>
+              <div class="eco-sub" id="ecoCashbackSub"></div>
+            </div>
+            <div class="eco-item">
+              <div class="eco-label" data-i18n="ecoMarginLabel">Маржа после программы</div>
+              <div class="eco-value" id="ecoMargin">—</div>
+              <div class="eco-sub" id="ecoMarginSub"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Methodology -->
+      <div class="methodology">
+        <div class="methodology-title" data-i18n="methodologyTitle">Как считается</div>
+        <p data-i18n-html="methodologyP1">Калькулятор балансирует три силы: вознаграждение должно быть <strong>заметным для клиента</strong>, не <strong>съедать маржу</strong> и не превращаться <strong>через 12 месяцев в скрытую скидку</strong>, к которой клиент привыкнет.</p>
+
+        <div class="formula-block" data-i18n="formula1">ставка = маржа × коэфф. режима × коэфф. сферы
++ ограничение по эффективной скидке (правило 20 / 50 / выше)
++ ограничение: не более половины маржинальности</div>
+
+        <p data-i18n-html="methodologyP2"><strong>Лимит списания</strong> привязан к маржинальности по правилу: до 20% маржи — не более 5–10% списания, до 50% — не более 20–25%, выше 50% — до 30–40% по сфере бизнеса.</p>
+
+        <p data-i18n-html="methodologyP3"><strong>Приветственные баллы</strong> — меньшее из психологически заметной доли среднего чека (8–12% с верхним пределом) и фиксированной доли маржи первой покупки. 1 балл = 1 ₽. Округление до 50, минимум 50.</p>
+
+        <div class="formula-block" data-i18n="formula2">баллы = мин(чек × доля чека, чек × маржа × коэфф. щедрости)
+баллы = округление до 50
+баллы = макс(50, баллы)</div>
+      </div>
+    </div>
+
+    <!-- DISCOUNT stub -->
+    <div class="discount-stub" id="discountStub">
+      <div class="discount-stub-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 0C1.34315 0 0 1.34315 0 3V8C0 9.65685 1.34315 11 3 11H6C7.65685 11 9 9.65685 9 8V3C9 1.34315 7.65685 0 6 0H3ZM2 3C2 2.44772 2.44772 2 3 2H6C6.55228 2 7 2.44772 7 3V8C7 8.55228 6.55228 9 6 9H3C2.44772 9 2 8.55228 2 8V3Z" fill="#5169f3"/></svg>
+      </div>
+      <div class="discount-stub-title" data-i18n="discountStubTitle">Калькулятор пока поддерживает только режим Кэшбэк</div>
+      <p class="discount-stub-text" data-i18n="discountStubText">Для прямых скидок настройте программу вручную в форме слева.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+'use strict';
+
+// ─── i18n ───
+const I18N = {
+  ru: {
+    locale: 'ru-RU',
+    currency: '₽',
+    aovMin: 100,
+    aovDefault: 2500,
+    aovStep: 100,
+    welcomeRound: 50,
+    welcomeMin: 50,
+    thresholdRound: 1000,
+    headerSub: 'Калькулятор · Программа лояльности',
+    closeTitle: 'Закрыть',
+    headline: 'Подберите параметры программы',
+    lead: 'Введите три параметра — калькулятор подберёт значения, защищающие маржу от размытия и оставляющие программу заметной для клиента. Все ограничения учитывают специфику вашей сферы бизнеса.',
+    aovLabel: 'Средний чек',
+    marginLabel: 'Маржинальность',
+    verticalLabel: 'Сфера бизнеса',
+    verticalHint: 'отрасль',
+    'vertical.fmcg': 'Продукты / FMCG / алкоголь',
+    'vertical.retail_mass': 'Розница массмаркет (аптека, электроника)',
+    'vertical.hospitality': 'Кафе / рестораны',
+    'vertical.beauty': 'Красота / здоровье',
+    'vertical.services': 'Услуги / образование',
+    'vertical.retail_mid': 'Розница средний+ (одежда, ювелирка)',
+    'vertical.premium': 'Премиум / luxury',
+    'vertical.other': 'Другое',
+    modeLabel: 'Режим',
+    'mode.conservative': 'Консервативный',
+    'mode.balanced': 'Баланс',
+    'mode.aggressive': 'Агрессивный',
+    modeDescConservative: 'Минимальная отдача маржи в программу. Каждая операция уверенно прибыльна. Подходит для бизнесов с тонкой маржой.',
+    modeDescBalanced: 'Программа заметна клиенту, экономика остаётся здоровой. Универсальный выбор для большинства бизнесов.',
+    modeDescAggressive: 'Максимальная щедрость для роста базы и удержания. Подходит при высокой маржинальности и фокусе на привлечение.',
+    apply: 'Применить настройки',
+    applying: 'Применяем…',
+    applyTipDiscount: 'Поддерживается только режим Кэшбэк',
+    applyTipOutside: 'Калькулятор открыт вне UDS Admin',
+    step01: 'Шаг 01',
+    step02: 'Шаг 02',
+    step03: 'Шаг 03',
+    welcomeTitle: 'Приветственные баллы',
+    welcomeUnit: ' б.',
+    tiersTitle: 'Статусы и условия',
+    'tierHead.status': 'Статус',
+    'tierHead.cashback': 'Кэшбэк',
+    'tierHead.redeem': 'Списание',
+    'tierHead.condition': 'Условие достижения',
+    tierBase: 'Базовый',
+    tierSilver: 'Серебро',
+    tierGold: 'Золото',
+    tierPlatinum: 'Платина',
+    tierSubBase: 'Все участники',
+    tierSubSilver: 'Постоянный',
+    tierSubGold: 'Лояльный',
+    tierSubPlatinum: 'VIP',
+    tierCondJoin: 'при вступлении',
+    redeemPrefix: 'до ',
+    stressTitle: 'Проверка на устойчивость',
+    stress1Label: 'Маржа на первой покупке нового клиента',
+    stress2Label: 'Маржа при максимальном списании постоянным клиентом',
+    stress3Label: 'Фактическая скидка для клиента через год',
+    ecoTitle: 'Экономика типовой операции',
+    ecoCheckLabel: 'Чек',
+    ecoCogsLabel: 'Себестоимость',
+    ecoCashbackLabel: 'Стоимость кэшбэка',
+    ecoMarginLabel: 'Маржа после программы',
+    methodologyTitle: 'Как считается',
+    methodologyP1: 'Калькулятор балансирует три силы: вознаграждение должно быть <strong>заметным для клиента</strong>, не <strong>съедать маржу</strong> и не превращаться <strong>через 12 месяцев в скрытую скидку</strong>, к которой клиент привыкнет.',
+    methodologyP2: '<strong>Лимит списания</strong> привязан к маржинальности по правилу: до 20% маржи — не более 5–10% списания, до 50% — не более 20–25%, выше 50% — до 30–40% по сфере бизнеса.',
+    methodologyP3: '<strong>Приветственные баллы</strong> — меньшее из психологически заметной доли среднего чека (8–12% с верхним пределом) и фиксированной доли маржи первой покупки. 1 балл = 1 единица валюты. Округление до 50, минимум 50.',
+    formula1: 'ставка = маржа × коэфф. режима × коэфф. сферы\n+ ограничение по эффективной скидке (правило 20 / 50 / выше)\n+ ограничение: не более половины маржинальности',
+    formula2: 'баллы = мин(чек × доля чека, чек × маржа × коэфф. щедрости)\nбаллы = округление до 50\nбаллы = макс(50, баллы)',
+    discountStubTitle: 'Калькулятор пока поддерживает только режим Кэшбэк',
+    discountStubText: 'Для прямых скидок настройте программу вручную в форме слева.',
+    stressIntroHtml: 'Три точки, где программа может неожиданно ударить по марже. <span style="color:#52a572;font-weight:600;">Зелёный</span> — операция остаётся прибыльной, <span style="color:#94740a;font-weight:600;">оранжевый</span> — на грани, <span style="color:var(--color-danger-300);font-weight:600;">красный</span> — риск убытка.',
+    welcomeSub: (pct, marginAmt) => 'Это ' + pct + '% от среднего чека. При списании на первой покупке маржа составит ' + marginAmt + '.',
+    tierCondFrom: (amt) => 'от ' + amt + ' покупок',
+    opSub: (sign, pct) => sign + pct + '% от чека — ' + (
+      parseFloat(pct) >= 15 ? 'операция остаётся прибыльной' :
+      parseFloat(pct) >= 5  ? 'маржа сильно просела, на грани' :
+                              'риск убытка от такой операции'
+    ),
+    stress3SubDyn: (verticalName, pct) => 'для ' + verticalName + ' типично ' + pct + '% списания — остальное сгорает или копится у клиентов',
+    ecoCashbackSubFn: (pct) => 'только ' + pct + '% баллов превращаются в скидку',
+    ecoMarginSubFn: (pct) => pct + '% от чека',
+    warnFirstLoss: 'При такой маржинальности агрессивный режим может приводить к убытку на отдельных операциях. Рассмотрите консервативный.',
+    warnMarginDrain: 'Программа съедает больше половины маржи. Снизьте режим или увеличьте маржинальность.',
+    warnEffDiscount: (effPct, marginPct, verticalName) => 'Через год клиент ощутит программу как ' + effPct + '% скидки. Это превышает безопасный порог для маржинальности ' + marginPct + '% (' + verticalName + ').',
+    'verticalName.fmcg': 'продуктового ритейла',
+    'verticalName.retail_mass': 'массмаркет-розницы',
+    'verticalName.hospitality': 'кафе и ресторанов',
+    'verticalName.beauty': 'бьюти и здоровья',
+    'verticalName.services': 'услуг и образования',
+    'verticalName.retail_mid': 'розницы среднего+',
+    'verticalName.premium': 'премиум-сегмента',
+    'verticalName.other': 'вашей сферы'
+  },
+  en: {
+    locale: 'en-US',
+    currency: '$',
+    aovMin: 1,
+    aovDefault: 25,
+    aovStep: 1,
+    welcomeRound: 1,
+    welcomeMin: 1,
+    thresholdRound: 10,
+    headerSub: 'Calculator · Loyalty Program',
+    closeTitle: 'Close',
+    headline: 'Set up your loyalty program',
+    lead: 'Enter three parameters — the calculator will pick values that protect your margin from dilution while keeping the program visible to customers. All limits account for your business vertical.',
+    aovLabel: 'Average order value',
+    marginLabel: 'Margin',
+    verticalLabel: 'Business vertical',
+    verticalHint: 'industry',
+    'vertical.fmcg': 'Grocery / FMCG / alcohol',
+    'vertical.retail_mass': 'Mass-market retail (pharmacy, electronics)',
+    'vertical.hospitality': 'Cafés / restaurants',
+    'vertical.beauty': 'Beauty / health',
+    'vertical.services': 'Services / education',
+    'vertical.retail_mid': 'Mid-market retail (apparel, jewelry)',
+    'vertical.premium': 'Premium / luxury',
+    'vertical.other': 'Other',
+    modeLabel: 'Mode',
+    'mode.conservative': 'Conservative',
+    'mode.balanced': 'Balanced',
+    'mode.aggressive': 'Aggressive',
+    modeDescConservative: 'Minimal margin given back to the program. Every transaction is reliably profitable. Best for thin-margin businesses.',
+    modeDescBalanced: 'The program is visible to customers, the economics stay healthy. A universal choice for most businesses.',
+    modeDescAggressive: 'Maximum generosity for base growth and retention. Best with high margins and an acquisition focus.',
+    apply: 'Apply settings',
+    applying: 'Applying…',
+    applyTipDiscount: 'Only Cashback mode is supported',
+    applyTipOutside: 'Calculator is opened outside UDS Admin',
+    step01: 'Step 01',
+    step02: 'Step 02',
+    step03: 'Step 03',
+    welcomeTitle: 'Welcome points',
+    welcomeUnit: ' pts',
+    tiersTitle: 'Tiers and conditions',
+    'tierHead.status': 'Tier',
+    'tierHead.cashback': 'Cashback',
+    'tierHead.redeem': 'Redemption',
+    'tierHead.condition': 'How to reach',
+    tierBase: 'Base',
+    tierSilver: 'Silver',
+    tierGold: 'Gold',
+    tierPlatinum: 'Platinum',
+    tierSubBase: 'All members',
+    tierSubSilver: 'Repeat',
+    tierSubGold: 'Loyal',
+    tierSubPlatinum: 'VIP',
+    tierCondJoin: 'on joining',
+    redeemPrefix: 'up to ',
+    stressTitle: 'Stress test',
+    stress1Label: 'Margin on a new customer’s first purchase',
+    stress2Label: 'Margin at max redemption by a returning customer',
+    stress3Label: 'Effective discount the customer sees after a year',
+    ecoTitle: 'Economics of a typical transaction',
+    ecoCheckLabel: 'Order',
+    ecoCogsLabel: 'COGS',
+    ecoCashbackLabel: 'Cashback cost',
+    ecoMarginLabel: 'Margin after program',
+    methodologyTitle: 'How it’s calculated',
+    methodologyP1: 'The calculator balances three forces: the reward must be <strong>visible to the customer</strong>, must not <strong>eat into margin</strong>, and must not turn into <strong>a hidden discount within 12 months</strong> that customers grow used to.',
+    methodologyP2: '<strong>Redemption limit</strong> is tied to margin: under 20% margin — no more than 5–10% redemption; under 50% — no more than 20–25%; above 50% — up to 30–40% by vertical.',
+    methodologyP3: '<strong>Welcome points</strong> — the smaller of a psychologically visible share of the average order (8–12% with a cap) and a fixed share of the first-purchase margin. 1 point = 1 currency unit. Rounded to 50, minimum 50.',
+    formula1: 'rate = margin × mode coeff. × vertical coeff.\n+ effective-discount cap (20 / 50 / above rule)\n+ cap: no more than half the margin',
+    formula2: 'points = min(order × order share, order × margin × generosity coeff.)\npoints = round to 50\npoints = max(50, points)',
+    discountStubTitle: 'Calculator currently supports only Cashback mode',
+    discountStubText: 'For direct discounts, configure the program manually in the form on the left.',
+    stressIntroHtml: 'Three points where the program can unexpectedly hit margin. <span style="color:#52a572;font-weight:600;">Green</span> — transaction stays profitable, <span style="color:#94740a;font-weight:600;">orange</span> — on the edge, <span style="color:var(--color-danger-300);font-weight:600;">red</span> — risk of loss.',
+    welcomeSub: (pct, marginAmt) => 'That’s ' + pct + '% of the average order. If a new customer redeems on the first purchase, the margin will be ' + marginAmt + '.',
+    tierCondFrom: (amt) => 'from ' + amt + ' in purchases',
+    opSub: (sign, pct) => sign + pct + '% of order — ' + (
+      parseFloat(pct) >= 15 ? 'transaction stays profitable' :
+      parseFloat(pct) >= 5  ? 'margin took a hit, on the edge' :
+                              'risk of loss on this transaction'
+    ),
+    stress3SubDyn: (verticalName, pct) => 'for ' + verticalName + ' the typical redemption is ' + pct + '% — the rest expires or accrues on customer balances',
+    ecoCashbackSubFn: (pct) => 'only ' + pct + '% of points convert into a discount',
+    ecoMarginSubFn: (pct) => pct + '% of order',
+    warnFirstLoss: 'At this margin level, aggressive mode can cause losses on individual transactions. Consider conservative mode.',
+    warnMarginDrain: 'The program is consuming more than half of the margin. Lower the mode or raise the margin.',
+    warnEffDiscount: (effPct, marginPct, verticalName) => 'After a year, the customer will perceive the program as a ' + effPct + '% discount. This exceeds the safe threshold for ' + marginPct + '% margin (' + verticalName + ').',
+    'verticalName.fmcg': 'grocery retail',
+    'verticalName.retail_mass': 'mass-market retail',
+    'verticalName.hospitality': 'cafés and restaurants',
+    'verticalName.beauty': 'beauty and health',
+    'verticalName.services': 'services and education',
+    'verticalName.retail_mid': 'mid-market retail',
+    'verticalName.premium': 'the premium segment',
+    'verticalName.other': 'your vertical'
+  }
+};
+
+const LANG = (function() {
+  const langParam = new URLSearchParams(window.location.search).get('lang');
+  if (langParam === 'ru' || langParam === 'en') return langParam;
+  const nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  return nav.indexOf('ru') === 0 ? 'ru' : 'en';
+})();
+const L = I18N[LANG];
+document.documentElement.lang = LANG;
+
+function applyStaticI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    const key = el.getAttribute('data-i18n');
+    if (L[key] != null) el.textContent = L[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    const key = el.getAttribute('data-i18n-html');
+    if (L[key] != null) el.innerHTML = L[key];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+    const key = el.getAttribute('data-i18n-title');
+    if (L[key] != null) el.setAttribute('title', L[key]);
+  });
+  const aovSuffix = document.getElementById('aovSuffix');
+  if (aovSuffix) aovSuffix.textContent = L.currency;
+  const aovInput = document.getElementById('inputAov');
+  if (aovInput) {
+    aovInput.min = L.aovMin;
+    aovInput.step = L.aovStep;
+    aovInput.placeholder = String(L.aovDefault);
+  }
+  const stressIntro = document.getElementById('stressIntro');
+  if (stressIntro) stressIntro.innerHTML = L.stressIntroHtml;
+}
+applyStaticI18n();
+
+// ─── Configuration ───
+const MODE_CONFIG = {
+  conservative: {
+    label: 'Консервативный',
+    desc: 'Минимальная отдача маржи в программу. Каждая операция уверенно прибыльна. Подходит для бизнесов с тонкой маржой.',
+    K_rate: 0.12,
+    K_welcome: 0.30,
+    welcomePct: 0.08,
+    welcomeCap: 0.10,
+    K_redeem: 0.7,
+    tierStep: 1,
+    tiers: 3
+  },
+  balanced: {
+    label: 'Баланс',
+    desc: 'Программа заметна клиенту, экономика остаётся здоровой. Универсальный выбор для большинства бизнесов.',
+    K_rate: 0.18,
+    K_welcome: 0.50,
+    welcomePct: 0.10,
+    welcomeCap: 0.12,
+    K_redeem: 1.0,
+    tierStep: 1.5,
+    tiers: 4
+  },
+  aggressive: {
+    label: 'Агрессивный',
+    desc: 'Максимальная щедрость для роста базы и удержания. Подходит при высокой маржинальности и фокусе на привлечение.',
+    K_rate: 0.25,
+    K_welcome: 0.70,
+    welcomePct: 0.12,
+    welcomeCap: 0.15,
+    K_redeem: 1.15,
+    tierStep: 2,
+    tiers: 4
+  }
+};
+
+const VERTICAL_CONFIG = {
+  fmcg:        { K_rate_v: 0.5,  redemption_real: 0.65, redeemCapAbs: 15, name: L['verticalName.fmcg'] },
+  retail_mass: { K_rate_v: 0.7,  redemption_real: 0.55, redeemCapAbs: 25, name: L['verticalName.retail_mass'] },
+  hospitality: { K_rate_v: 0.85, redemption_real: 0.50, redeemCapAbs: 30, name: L['verticalName.hospitality'] },
+  beauty:      { K_rate_v: 1.0,  redemption_real: 0.45, redeemCapAbs: 30, name: L['verticalName.beauty'] },
+  services:    { K_rate_v: 1.0,  redemption_real: 0.40, redeemCapAbs: 30, name: L['verticalName.services'] },
+  retail_mid:  { K_rate_v: 1.0,  redemption_real: 0.40, redeemCapAbs: 35, name: L['verticalName.retail_mid'] },
+  premium:     { K_rate_v: 1.1,  redemption_real: 0.30, redeemCapAbs: 40, name: L['verticalName.premium'] },
+  other:       { K_rate_v: 0.85, redemption_real: 0.50, redeemCapAbs: 30, name: L['verticalName.other'] }
+};
+
+function effDiscountCap(marginPct) {
+  if (marginPct <= 20) return 1.5;
+  if (marginPct <= 50) return 3.0;
+  return 5.0;
+}
+
+function redeemCapByMargin(marginPct) {
+  if (marginPct <= 20) return 10;
+  if (marginPct <= 50) return 25;
+  return 50;
+}
+
+const TIER_VISUAL = [
+  { name: L.tierBase,     sub: L.tierSubBase,     dot: '#8B928F', thresholdMul: 0 },
+  { name: L.tierSilver,   sub: L.tierSubSilver,   dot: '#9CA3A0', thresholdMul: 5 },
+  { name: L.tierGold,     sub: L.tierSubGold,     dot: '#B8842B', thresholdMul: 15 },
+  { name: L.tierPlatinum, sub: L.tierSubPlatinum, dot: '#0F1411', thresholdMul: 30 }
+];
+
+// ─── URL params ───
+const params = new URLSearchParams(window.location.search);
+
+function parseParam(name, def, min, max) {
+  const v = parseFloat(params.get(name));
+  if (isNaN(v)) return def;
+  if (min !== undefined && v < min) return min;
+  if (max !== undefined && v > max) return max;
+  return v;
+}
+
+let currentAov = parseParam('aov', L.aovDefault, L.aovMin);
+let currentMargin = parseParam('margin', 40, 5, 95);
+let currentMode = ['conservative', 'balanced', 'aggressive'].includes(params.get('mode'))
+  ? params.get('mode') : 'balanced';
+const VERTICAL_KEYS = Object.keys(VERTICAL_CONFIG);
+let currentVertical = VERTICAL_KEYS.includes(params.get('businessSphere'))
+  ? params.get('businessSphere') : 'other';
+const policy = params.get('policy') === 'DISCOUNT' ? 'DISCOUNT' : 'CHARGE_SCORES';
+const parentOrigin = params.get('parentOrigin') || '';
+
+// Validate parentOrigin
+let validParentOrigin = '';
+try {
+  if (parentOrigin) {
+    const u = new URL(parentOrigin);
+    if (u.protocol === 'https:' || u.protocol === 'http:') {
+      validParentOrigin = u.origin;
+    }
+  }
+} catch (e) {
+  console.warn('Invalid parentOrigin:', parentOrigin);
+}
+
+// ─── DOM refs ───
+const inputAov = document.getElementById('inputAov');
+const inputMargin = document.getElementById('inputMargin');
+const verticalSelect = document.getElementById('vertical');
+const modeBtns = document.querySelectorAll('.mode-btn');
+const modeDesc = document.getElementById('modeDesc');
+const warningBanner = document.getElementById('warningBanner');
+const btnApply = document.getElementById('btnApply');
+const applyTooltip = document.getElementById('applyTooltip');
+const welcomeVal = document.getElementById('welcomeVal');
+const welcomeSub = document.getElementById('welcomeSub');
+const tiersBody = document.getElementById('tiersBody');
+const resultsContent = document.getElementById('resultsContent');
+const discountStub = document.getElementById('discountStub');
+
+// ─── Calculation engine ───
+function calcBaseRate(margin, mode, vertical) {
+  const cfg = MODE_CONFIG[mode];
+  const v = VERTICAL_CONFIG[vertical];
+  const marginPct = margin * 100;
+  let rate = margin * cfg.K_rate * 100 * v.K_rate_v;
+  const effCap = effDiscountCap(marginPct);
+  const rateCapByEffDiscount = effCap / v.redemption_real;
+  rate = Math.min(rate, rateCapByEffDiscount, marginPct * 0.5);
+  rate = Math.max(0.5, rate);
+  rate = Math.round(rate * 2) / 2;
+  return rate;
+}
+
+function calcMaxRedemption(margin, mode, vertical) {
+  const cfg = MODE_CONFIG[mode];
+  const v = VERTICAL_CONFIG[vertical];
+  const marginPct = margin * 100;
+  let maxR = Math.min(v.redeemCapAbs, redeemCapByMargin(marginPct));
+  maxR = maxR * cfg.K_redeem;
+  maxR = Math.max(5, Math.min(50, maxR));
+  maxR = Math.round(maxR / 5) * 5;
+  return maxR;
+}
+
+function calcWelcome(aov, margin, mode) {
+  const cfg = MODE_CONFIG[mode];
+  const welcomePct = Math.min(cfg.welcomePct, cfg.welcomeCap);
+  let w = Math.min(aov * welcomePct, aov * margin * cfg.K_welcome);
+  w = Math.round(w / L.welcomeRound) * L.welcomeRound;
+  w = Math.max(L.welcomeMin, w);
+  return w;
+}
+
+function calcTiers(aov, margin, baseRate, maxRedemption, mode) {
+  const cfg = MODE_CONFIG[mode];
+  const count = cfg.tiers;
+  const tiers = [];
+  for (let i = 0; i < count; i++) {
+    const rate = Math.round((baseRate + i * cfg.tierStep) * 10) / 10;
+    const redeem = Math.min(50, maxRedemption + i * 5);
+    const thresholdRaw = aov * TIER_VISUAL[i].thresholdMul;
+    const threshold = Math.round(thresholdRaw / L.thresholdRound) * L.thresholdRound;
+    tiers.push({
+      ...TIER_VISUAL[i],
+      rate,
+      redeem,
+      threshold
+    });
+  }
+  return tiers;
+}
+
+function calcTypicalEconomics(aov, margin, baseRate, vertical) {
+  const v = VERTICAL_CONFIG[vertical];
+  const cashback = aov * baseRate / 100;
+  const effectiveCost = cashback * v.redemption_real;
+  const typicalMargin = aov * margin - effectiveCost;
+  const typicalMarginPct = typicalMargin / aov * 100;
+  return { cashback, effectiveCost, typicalMargin, typicalMarginPct };
+}
+
+function calcFirstPurchaseStress(aov, margin, welcome, baseTier) {
+  const maxFromBalance = aov * baseTier.redeem / 100;
+  const actualSpend = Math.min(welcome, maxFromBalance);
+  const cashPayment = aov - actualSpend;
+  const cogs = aov * (1 - margin);
+  const cashbackCost = cashPayment * baseTier.rate / 100;
+  const firstPurchaseMargin = cashPayment - cogs - cashbackCost;
+  return { firstPurchaseMargin, actualSpend, cashPayment };
+}
+
+function calcTopRedeemStress(aov, margin, topTier) {
+  const cashAfterTop = aov - aov * topTier.redeem / 100;
+  const marginTopRedeem = cashAfterTop * margin - cashAfterTop * topTier.rate / 100;
+  return { marginTopRedeem };
+}
+
+// ─── Rendering ───
+function formatNum(n) {
+  return Math.round(n).toLocaleString(L.locale);
+}
+function formatMoney(n) {
+  var num = formatNum(Math.abs(n));
+  var sign = n < 0 ? '−' : '';
+  return LANG === 'en' ? sign + L.currency + num : sign + num + ' ' + L.currency;
+}
+function formatMoneySigned(n) {
+  var num = formatNum(Math.abs(n));
+  if (LANG === 'en') return (n >= 0 ? '+' : '−') + L.currency + num;
+  return (n >= 0 ? '+' : '−') + num + ' ' + L.currency;
+}
+
+function classifyOpMargin(marginValue, aov) {
+  const pct = marginValue / aov * 100;
+  if (pct >= 15) return '';
+  if (pct >= 5) return 'warn';
+  return 'danger';
+}
+
+function classifyEffDiscount(effDiscount, marginPct) {
+  const cap = effDiscountCap(marginPct);
+  if (effDiscount <= cap) return '';
+  if (effDiscount <= cap * 1.05) return 'warn';
+  return 'danger';
+}
+
+function render() {
+  const aov = currentAov;
+  const margin = currentMargin / 100;
+  const mode = currentMode;
+  const vertical = currentVertical;
+  const v = VERTICAL_CONFIG[vertical];
+  const marginPct = currentMargin;
+
+  var modeDescKey = mode === 'conservative' ? 'modeDescConservative' : (mode === 'balanced' ? 'modeDescBalanced' : 'modeDescAggressive');
+  modeDesc.textContent = L[modeDescKey];
+
+  modeBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+
+  if (verticalSelect.value !== vertical) verticalSelect.value = vertical;
+
+  if (policy === 'DISCOUNT') {
+    resultsContent.style.display = 'none';
+    discountStub.classList.add('visible');
+    return;
+  }
+
+  resultsContent.style.display = '';
+  discountStub.classList.remove('visible');
+
+  const baseRate = calcBaseRate(margin, mode, vertical);
+  const maxRedemption = calcMaxRedemption(margin, mode, vertical);
+  const welcome = calcWelcome(aov, margin, mode);
+  const tiers = calcTiers(aov, margin, baseRate, maxRedemption, mode);
+  const eco = calcTypicalEconomics(aov, margin, baseRate, vertical);
+  const stress = calcFirstPurchaseStress(aov, margin, welcome, tiers[0]);
+  const topStress = calcTopRedeemStress(aov, margin, tiers[tiers.length - 1]);
+  const effAvgDiscount = tiers[0].rate * v.redemption_real;
+
+  welcomeVal.textContent = formatNum(welcome);
+  const welcomePct = (welcome / aov * 100).toFixed(1);
+  welcomeSub.textContent = L.welcomeSub(welcomePct, formatMoney(stress.firstPurchaseMargin));
+
+  tiersBody.innerHTML = '';
+  tiers.forEach(function(t, i) {
+    var tr = document.createElement('tr');
+    var condText = i === 0 ? L.tierCondJoin : L.tierCondFrom(formatMoney(t.threshold));
+    tr.innerHTML =
+      '<td><div class="tier-name-cell"><span class="tier-dot" style="background:' + t.dot + '"></span><div><div class="tier-name">' + t.name + '</div><div class="tier-sub">' + t.sub + '</div></div></div></td>' +
+      '<td class="tier-value">' + t.rate + '%</td>' +
+      '<td class="tier-value">' + L.redeemPrefix + t.redeem + '%</td>' +
+      '<td class="tier-condition">' + condText + '</td>';
+    tiersBody.appendChild(tr);
+  });
+
+  var cogs = aov * (1 - margin);
+  document.getElementById('ecoCheck').textContent = formatMoney(aov);
+  document.getElementById('ecoCogs').textContent = formatMoney(cogs);
+  document.getElementById('ecoCashback').textContent = formatMoney(eco.effectiveCost);
+  document.getElementById('ecoCashbackSub').textContent = L.ecoCashbackSubFn(Math.round(v.redemption_real * 100));
+  document.getElementById('ecoMargin').textContent = formatMoney(eco.typicalMargin);
+  document.getElementById('ecoMarginSub').textContent = L.ecoMarginSubFn(eco.typicalMarginPct.toFixed(1));
+
+  function applyStress(id, cls, val, sub) {
+    var el = document.getElementById(id);
+    el.classList.remove('warn', 'danger');
+    if (cls) el.classList.add(cls);
+    document.getElementById(id + '-val').textContent = val;
+    if (sub !== undefined) document.getElementById(id + '-sub').textContent = sub;
+  }
+  function opSub(marginValue) {
+    var pct = marginValue / aov * 100;
+    var sign = marginValue >= 0 ? '+' : '';
+    return L.opSub(sign, pct.toFixed(1));
+  }
+  applyStress('stress-1', classifyOpMargin(stress.firstPurchaseMargin, aov),
+    formatMoneySigned(stress.firstPurchaseMargin),
+    opSub(stress.firstPurchaseMargin));
+  applyStress('stress-2', classifyOpMargin(topStress.marginTopRedeem, aov),
+    formatMoneySigned(topStress.marginTopRedeem),
+    opSub(topStress.marginTopRedeem));
+  applyStress('stress-3', classifyEffDiscount(effAvgDiscount, marginPct),
+    effAvgDiscount.toFixed(1) + '%',
+    L.stress3SubDyn(v.name, Math.round(v.redemption_real * 100)));
+
+  var warningText = '';
+  var warningReason = '';
+  if (stress.firstPurchaseMargin / aov < 0.05) {
+    warningText = L.warnFirstLoss;
+    warningReason = 'first_purchase_loss';
+  } else if (eco.typicalMargin < aov * margin * 0.5) {
+    warningText = L.warnMarginDrain;
+    warningReason = 'margin_drain';
+  } else if (effAvgDiscount > effDiscountCap(marginPct) * 1.05) {
+    warningText = L.warnEffDiscount(effAvgDiscount.toFixed(1), marginPct, v.name);
+    warningReason = 'effective_discount_high';
+  }
+  if (warningText) {
+    warningBanner.textContent = warningText;
+    warningBanner.classList.add('visible');
+    sendAnalytics('calculator.warning_shown', { reason: warningReason });
+  } else {
+    warningBanner.classList.remove('visible');
+  }
+}
+
+// ─── postMessage ───
+function sendToParent(type, payload) {
+  if (!validParentOrigin) {
+    console.warn('No valid parentOrigin, message not sent:', type);
+    return;
+  }
+  var msg = payload !== undefined ? Object.assign({ type: type }, payload) : { type: type };
+  window.parent.postMessage(msg, validParentOrigin);
+}
+
+function sendAnalytics(event, data) {
+  if (!validParentOrigin) return;
+  window.parent.postMessage({
+    type: 'uds.calculator.analytics',
+    event: event,
+    data: data || {}
+  }, validParentOrigin);
+}
+
+function buildApplyPayload() {
+  var aov = currentAov;
+  var margin = currentMargin / 100;
+  var mode = currentMode;
+
+  var vertical = currentVertical;
+  var baseRate = calcBaseRate(margin, mode, vertical);
+  var maxRedemption = calcMaxRedemption(margin, mode, vertical);
+  var welcome = calcWelcome(aov, margin, mode);
+  var tiers = calcTiers(aov, margin, baseRate, maxRedemption, mode);
+
+  var baseTier = tiers[0];
+  var additionalTiers = tiers.slice(1).map(function(t) {
+    return {
+      name: t.name,
+      rate: t.rate,
+      maxScoresDiscount: t.redeem,
+      totalCashSpent: t.threshold
+    };
+  });
+
+  return {
+    type: 'uds.calculator.apply',
+    version: 1,
+    payload: {
+      welcomePoints: welcome,
+      baseTier: {
+        name: L.tierBase,
+        rate: baseTier.rate,
+        maxScoresDiscount: baseTier.redeem
+      },
+      tiers: additionalTiers,
+      meta: {
+        aov: aov,
+        margin: currentMargin,
+        mode: mode,
+        businessSphere: vertical
+      }
+    }
+  };
+}
+
+// ─── Event handlers ───
+var appliedBefore = false;
+
+inputAov.value = currentAov;
+inputMargin.value = currentMargin;
+
+function onInputChange(field) {
+  var aovVal = parseFloat(inputAov.value);
+  var marginVal = parseFloat(inputMargin.value);
+
+  if (!isNaN(aovVal) && aovVal >= L.aovMin) currentAov = aovVal;
+  if (!isNaN(marginVal) && marginVal >= 5 && marginVal <= 95) currentMargin = marginVal;
+
+  render();
+  scheduleAnalyticsInput(field);
+}
+
+inputAov.addEventListener('input', function() { onInputChange('aov'); });
+inputMargin.addEventListener('input', function() { onInputChange('margin'); });
+
+modeBtns.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    currentMode = btn.dataset.mode;
+    render();
+    scheduleAnalyticsInput('mode');
+  });
+});
+
+verticalSelect.value = currentVertical;
+verticalSelect.addEventListener('change', function() {
+  if (VERTICAL_KEYS.indexOf(verticalSelect.value) !== -1) {
+    currentVertical = verticalSelect.value;
+  } else {
+    currentVertical = 'other';
+  }
+  render();
+  scheduleAnalyticsInput('businessSphere');
+});
+
+// Apply button
+var canApply = validParentOrigin && policy !== 'DISCOUNT';
+
+if (!canApply) {
+  btnApply.disabled = true;
+  if (policy === 'DISCOUNT') {
+    applyTooltip.textContent = L.applyTipDiscount;
+  } else {
+    applyTooltip.textContent = L.applyTipOutside;
+  }
+}
+
+btnApply.addEventListener('click', function() {
+  if (!canApply || btnApply.disabled) return;
+
+  btnApply.disabled = true;
+  document.getElementById('btnApplyText').textContent = L.applying;
+
+  setTimeout(function() {
+    var payload = buildApplyPayload();
+    sendToParent(payload.type, payload);
+    sendAnalytics('calculator.applied', payload.payload);
+    appliedBefore = true;
+
+    setTimeout(function() {
+      sendToParent('uds.calculator.close');
+    }, 200);
+  }, 600);
+});
+
+// Close button
+document.getElementById('btnClose').addEventListener('click', function() {
+  sendAnalytics('calculator.closed', { appliedBefore: appliedBefore });
+  sendToParent('uds.calculator.close');
+});
+
+// ─── Analytics debounce ───
+var analyticsTimer = null;
+function scheduleAnalyticsInput(field) {
+  clearTimeout(analyticsTimer);
+  analyticsTimer = setTimeout(function() {
+    var value;
+    if (field === 'aov') value = currentAov;
+    else if (field === 'margin') value = currentMargin;
+    else if (field === 'businessSphere') value = currentVertical;
+    else value = currentMode;
+    sendAnalytics('calculator.input_changed', { field: field, value: value });
+  }, 500);
+}
+
+// ─── Init ───
+render();
+sendAnalytics('calculator.opened', {
+  aov: currentAov,
+  margin: currentMargin,
+  mode: currentMode,
+  businessSphere: currentVertical
+});
+</script>
+</body>
+</html>
